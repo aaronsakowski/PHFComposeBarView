@@ -5,7 +5,7 @@
 #import "PHFComposeBarView_Button.h"
 
 
-CGFloat const PHFComposeBarViewInitialHeight = 44.0f;
+CGFloat const PHFComposeBarViewInitialHeight = 54.0f;
 
 
 NSString *const PHFComposeBarViewDidChangeFrameNotification  = @"PHFComposeBarViewDidChangeFrame";
@@ -20,7 +20,7 @@ NSString *const PHFComposeBarViewAnimationCurveUserInfoKey    = @"PHFComposeBarV
 CGFloat const kHorizontalSpacing          =  8.0f;
 CGFloat const kFontSize                   = 17.0f;
 CGFloat const kTextContainerTopMargin     =  8.0f;
-CGFloat const kTextContainerBottomMargin  =  8.0f;
+CGFloat const kTextContainerBottomMargin  =  18.0f;
 CGFloat const kTextContainerLeftPadding   =  3.0f;
 CGFloat const kTextContainerRightPadding  =  2.0f;
 CGFloat const kTextContainerTopPadding    =  4.0f;
@@ -32,10 +32,10 @@ CGFloat const kPlaceholderTopMargin       =  2.0f;
 CGFloat const kButtonHeight               = 26.0f;
 CGFloat const kButtonTouchableOverlap     =  6.0f;
 CGFloat const kButtonRightMargin          = -2.0f;
-CGFloat const kButtonBottomMargin         =  8.0f;
+CGFloat const kButtonBottomMargin         =  18.0f;
 CGFloat const kUtilityButtonWidth         = 25.0f;
 CGFloat const kUtilityButtonHeight        = 25.0f;
-CGFloat const kUtilityButtonBottomMargin  =  9.0f;
+CGFloat const kUtilityButtonBottomMargin  =  19.0f;
 CGFloat const kCaretYOffset               =  7.0f;
 CGFloat const kCharCountFontSize          = 11.0f;
 CGFloat const kCharCountTopMargin         = 15.0f;
