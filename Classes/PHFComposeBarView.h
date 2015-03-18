@@ -4,7 +4,8 @@
 // Height of the view when text view is empty. Ideally, you should use this in
 // -initWithFrame:.
 extern CGFloat const PHFComposeBarViewInitialHeight;
-
+extern CGFloat const PHFComposeBarViewInitialVisibleHeight;
+extern CGFloat const PHFComposeBarViewUnderlap;
 
 // Each notification includes the view as object and a userInfo dictionary
 // containing the beginning and ending view frame. Animation key/value pairs are
