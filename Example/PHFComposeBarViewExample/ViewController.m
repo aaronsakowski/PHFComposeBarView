@@ -100,6 +100,10 @@ CGRect const kInitialViewFrame = { 0.0f, 0.0f, 320.0f, 480.0f };
     [self prependTextToTextView:@"Utility button pressed"];
 }
 
+- (void)composeBarViewDidPressSettingsButton:(PHFComposeBarView *)composeBarView {
+    [self prependTextToTextView:@"Settings button pressed"];
+}
+
 - (void)composeBarView:(PHFComposeBarView *)composeBarView
    willChangeFromFrame:(CGRect)startFrame
                toFrame:(CGRect)endFrame
@@ -146,7 +150,9 @@ CGRect const kInitialViewFrame = { 0.0f, 0.0f, 320.0f, 480.0f };
         [_composeBarView setMaxCharCount:160];
         [_composeBarView setMaxLinesCount:5];
         [_composeBarView setPlaceholder:@"Type something..."];
+        [_composeBarView setButtonTitle:@"Post as"];
         [_composeBarView setUtilityButtonImage:[UIImage imageNamed:@"Camera"]];
+        [_composeBarView setSettingsButtonImage:[UIImage imageNamed:@"Camera"]];
         [_composeBarView setDelegate:self];
     }
 

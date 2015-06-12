@@ -41,6 +41,10 @@ extern NSString *const PHFComposeBarViewFrameEndUserInfoKey;          // NSValue
 // Default is "Send".
 @property (strong, nonatomic) NSString *buttonTitle UI_APPEARANCE_SELECTOR;
 
+@property (strong, nonatomic, readonly) UIButton *settingsButton;
+
+@property (strong, nonatomic) UIImage *settingsButtonImage UI_APPEARANCE_SELECTOR;
+
 @property (weak, nonatomic) id <PHFComposeBarViewDelegate> delegate;
 
 // When set to NO, the text view, the utility button, and the main button are
@@ -86,6 +90,7 @@ extern NSString *const PHFComposeBarViewFrameEndUserInfoKey;          // NSValue
 @optional
 - (void)composeBarViewDidPressButton:(PHFComposeBarView *)composeBarView;
 - (void)composeBarViewDidPressUtilityButton:(PHFComposeBarView *)composeBarView;
+- (void)composeBarViewDidPressSettingsButton:(PHFComposeBarView *)composeBarView;
 - (void)composeBarView:(PHFComposeBarView *)composeBarView
    willChangeFromFrame:(CGRect)startFrame
                toFrame:(CGRect)endFrame

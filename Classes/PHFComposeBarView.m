@@ -35,6 +35,9 @@ CGFloat const kButtonBottomMargin         =  8.0f + PHFComposeBarViewUnderlap;
 CGFloat const kUtilityButtonWidth         = 25.0f;
 CGFloat const kUtilityButtonHeight        = 25.0f;
 CGFloat const kUtilityButtonBottomMargin  =  9.0f + PHFComposeBarViewUnderlap;
+CGFloat const kSettingsButtonWidth         = 25.0f;
+CGFloat const kSettingsButtonHeight        = 25.0f;
+CGFloat const kSettingsButtonBottomMargin  =  9.0f + PHFComposeBarViewUnderlap;
 CGFloat const kCaretYOffset               =  7.0f;
 CGFloat const kCharCountFontSize          = 11.0f;
 CGFloat const kCharCountTopMargin         = 15.0f;
@@ -190,6 +193,7 @@ static CGFloat kTextViewToSuperviewHeightDelta;
         [[self textView] setEditable:enabled];
         [self updateButtonEnabled];
         [[self utilityButton] setEnabled:enabled];
+        [[self settingsButton] setEnabled:enabled];
     }
 }
 
@@ -242,6 +246,15 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 - (void)setUtilityButtonImage:(UIImage *)image {
     [[self utilityButton] setImage:image forState:UIControlStateNormal];
     [self updateUtilityButtonVisibility];
+}
+
+- (UIImage *)settingsButtonImage {
+    return [[self settingsButton] imageForState:UIControlStateNormal];
+}
+
+- (void)setSettingsButtonImage:(UIImage *)image{
+    [[self settingsButton] setImage:image forState:UIControlStateNormal];
+    [self updateSettingsButtonVisibility];
 }
 
 #pragma mark - Public Methods
@@ -427,6 +440,21 @@ static CGFloat kTextViewToSuperviewHeightDelta;
     return _utilityButton;
 }
 
+@synthesize settingsButton = _settingsButton;
+- (UIButton *)settingsButton {
+    if (!_settingsButton) {
+        _settingsButton = [PHFComposeBarView_Button buttonWithType:UIButtonTypeCustom];
+        [_settingsButton setAutoresizingMask:UIViewAutoresizingFlexibleRightMargin|UIViewAutoresizingFlexibleTopMargin];
+        [_settingsButton setFrame:CGRectMake(0.0f,
+                                            [self bounds].size.height - kSettingsButtonHeight - kSettingsButtonBottomMargin,
+                                            kSettingsButtonWidth,
+                                            kSettingsButtonHeight)];
+        [_settingsButton addTarget:self action:@selector(didPressSettingsButton) forControlEvents:UIControlEventTouchUpInside];
+    }
+    
+    return _settingsButton;
+}
+
 #pragma mark - Helpers
 
 - (void)calculateRuntimeConstants {
@@ -448,6 +476,11 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 - (void)didPressUtilityButton {
     if ([[self delegate] respondsToSelector:@selector(composeBarViewDidPressUtilityButton:)])
         [[self delegate] composeBarViewDidPressUtilityButton:self];
+}
+
+- (void)didPressSettingsButton {
+    if ([[self delegate] respondsToSelector:@selector(composeBarViewDidPressSettingsButton:)])
+        [[self delegate] composeBarViewDidPressSettingsButton:self];
 }
 
 - (void)updatePlaceholderVisibility {
@@ -642,7 +675,7 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 
     if (!isHidden) {
         NSInteger count = [[[[self textView] text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]] length];
-        NSString *text = [NSString stringWithFormat:@"%d/%d", count, [self maxCharCount]];
+        NSString *text = [NSString stringWithFormat:@"%ld/%lu", (long)count, (unsigned long)[self maxCharCount]];
         [[self charCountLabel] setText:text];
     }
 }
@@ -654,6 +687,14 @@ static CGFloat kTextViewToSuperviewHeightDelta;
     } else if (![self utilityButtonImage] && [[self utilityButton] superview]) {
         [self shifTextFieldInDirection:-1];
         [self removeUtilityButton];
+    }
+}
+
+- (void)updateSettingsButtonVisibility {
+    if ([self settingsButtonImage] && ![[self settingsButton] superview]) {
+        [self insertSettingsButton];
+    } else if (![self settingsButtonImage] && [[self settingsButton] superview]) {
+        [self removeSettingsButton];
     }
 }
 
@@ -676,6 +717,38 @@ static CGFloat kTextViewToSuperviewHeightDelta;
 
 - (void)removeUtilityButton {
     [[self utilityButton] removeFromSuperview];
+}
+
+- (void)insertSettingsButton
+{
+    UIButton *settingsButton = [self settingsButton];
+    CGRect settingsButtonFrame = [settingsButton frame];
+    CGRect buttonFrame = [[self button] frame];
+    CGRect textContainerFrame = [[self textContainer] frame];
+    CGRect charCountLabelFrame = [[self charCountLabel] frame];
+    
+    CGFloat widthDelta = kHorizontalSpacing + kSettingsButtonWidth;
+    
+    buttonFrame.origin.x = buttonFrame.origin.x -= widthDelta;
+    [[self button] setFrame:buttonFrame];
+    
+    textContainerFrame.size.width -= widthDelta;
+    [[self textContainer] setFrame:textContainerFrame];
+    
+    charCountLabelFrame.origin.x = textContainerFrame.origin.x + textContainerFrame.size.width;
+    charCountLabelFrame.size.width = [self bounds].size.width - charCountLabelFrame.origin.x - kHorizontalSpacing;
+    [[self charCountLabel] setFrame:charCountLabelFrame];
+    
+    
+    settingsButtonFrame.origin.x = [self bounds].size.width - kHorizontalSpacing - kSettingsButtonWidth;
+    settingsButtonFrame.origin.y = [self frame].size.height - kUtilityButtonHeight - kUtilityButtonBottomMargin;
+    [settingsButton setFrame:settingsButtonFrame];
+    [self addSubview:settingsButton];
+}
+
+- (void)removeSettingsButton
+{
+    [[self settingsButton] removeFromSuperview];
 }
 
 - (void)handleTextViewChangeAnimated:(BOOL)animated {
